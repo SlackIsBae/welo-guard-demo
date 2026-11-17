@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="snow" id="snow" aria-hidden="true"></div>
+
   <nav class="nav">
     <a href="#" class="nav__logo">Welo Guard</a>
     <ul class="nav__links">
@@ -181,5 +183,28 @@
       </nav>
     </div>
   </footer>
+
+  <script>
+    // Winter snowfall: purely decorative, skipped when the visitor prefers reduced motion.
+    (function () {
+      var layer = document.getElementById('snow');
+      if (!layer || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+      var count = window.innerWidth < 640 ? 24 : 48;
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < count; i++) {
+        var flake = document.createElement('span');
+        var size = 3 + Math.random() * 6;
+        flake.className = 'snow__flake';
+        flake.style.setProperty('--x', (Math.random() * 100).toFixed(1) + '%');
+        flake.style.setProperty('--size', size.toFixed(1) + 'px');
+        flake.style.setProperty('--alpha', (0.35 + (size / 9) * 0.5).toFixed(2));
+        flake.style.setProperty('--dur', (9 + Math.random() * 14).toFixed(1) + 's');
+        flake.style.setProperty('--delay', (-Math.random() * 20).toFixed(1) + 's');
+        flake.style.setProperty('--drift', (Math.random() * 120 - 60).toFixed(0) + 'px');
+        frag.appendChild(flake);
+      }
+      layer.appendChild(frag);
+    })();
+  </script>
 </body>
 </html>
