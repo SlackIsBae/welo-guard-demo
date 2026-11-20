@@ -359,3 +359,32 @@ body {
   color: #A8B2C3;
   text-decoration: none;
 }
+
+/* THANKSGIVING THEME */
+:root { --pumpkin:#E8772E; --gold:#F2B33D; --maple:#B5451B; --cream:#FFF3DC; }
+body { background: linear-gradient(180deg,#2A140A 0%,#3B1D0E 100%); background-attachment: fixed; }
+.nav { background: #2A140A; border-bottom-color: rgba(242,179,61,0.3); }
+.nav__links a, .hero__subhead, .section__subhead, .card__desc, .feature__bullets li, .feature__quote-text, .stat-row .stat-label, .footer__links a, .cta-card__subhead { color: #E6CFAE; }
+.nav__btn, .hero__cta, .btn--primary { background: var(--pumpkin); }
+.hero__cta { box-shadow: 0 0 0 0 rgba(232,119,46,.6); animation: pulse 2s infinite; }
+.hero__eyebrow, .section__eyebrow, .feature__eyebrow, .cta-card__eyebrow, .card__tag, .card__link, .feature__bullets li::before { color: var(--gold); }
+.card--sentinel .card__tag, .card--sentinel .card__link, .feature--teal .feature__eyebrow, .feature--teal .feature__bullets li::before { color: var(--gold); }
+.hero { background: radial-gradient(ellipse at 50% 0%, rgba(242,179,61,.25), transparent 65%); border-bottom-color: rgba(242,179,61,.2); }
+.hero__headline { color: var(--cream); text-shadow: 0 3px 0 var(--maple); }
+.card, .cta-card, .feature__screen { background: #4A2512; border-color: #8A4A22; }
+.card { transition: transform .25s, box-shadow .25s; }
+.card:hover { transform: translateY(-6px) rotate(-1deg); box-shadow: 0 10px 24px rgba(0,0,0,.4); }
+.proof-bar, .footer, .section-divider { border-color: rgba(242,179,61,.2); }
+.btn--outline { border-color: var(--gold); }
+.hero__turkey { font-size: 72px; display: inline-block; transform-origin: 50% 90%; animation: waddle 1.6s ease-in-out infinite; }
+.leaves { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 10; }
+.leaves span { position: absolute; top: -60px; animation: fall linear infinite; }
+@keyframes fall {
+  0% { transform: translateY(-60px) translateX(0) rotate(0); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translateY(55vh) translateX(40px) rotate(180deg); }
+  100% { transform: translateY(110vh) translateX(-30px) rotate(360deg); opacity: .9; }
+}
+@keyframes waddle { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg) translateY(-6px); } }
+@keyframes pulse { 70% { box-shadow: 0 0 0 14px rgba(232,119,46,0); } 100% { box-shadow: 0 0 0 0 rgba(232,119,46,0); } }
+@media (prefers-reduced-motion: reduce) { .leaves, .hero__turkey, .hero__cta { animation: none; } .leaves span { animation: none; display: none; } .card:hover { transform: none; } }
