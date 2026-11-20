@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guidance for AI coding agents working in this repo.
+Guidance for any AI coding agent working in this repo.
 
 ## Project
 
@@ -10,66 +10,151 @@ Welo Guard marketing homepage. Static HTML and CSS, no build step.
 - Format: `npm run format`
 - Check formatting: `npm run lint`
 
-## Working from a Slack code channel
+## Use a Slack code channel for code work
 
-A code channel is a Slack channel created for one coding session
-([docs](https://docs.slack.dev/ai/slack-code/)). When you run in one, favor the
-code channel tools over plain chat messages for showing progress. The tools
-hold live state (status, diff, plans, checklists) in the channel header and
-tabs, so the conversation stays short and readable.
+A code channel is a Slack channel dedicated to one coding session
+([Slack docs](https://docs.slack.dev/ai/slack-code/)). It gives the work a
+header with live status, a diff tab, and attached tabs for plans, checklists,
+and reports, so people can follow along without reading every message.
 
-The tools are exposed with an `mcp__slackbot__` prefix. Bare names are used
-below.
+Open a code channel whenever you start code work on this repo: bug fixes,
+features, refactors, reviews, or anything that ends in a PR. One task, one
+channel.
 
-### Tools
+- **If your integration can create one**, do it at the start of the task,
+  before you post progress. Look for a tool or command that creates a code
+  channel (or a coding session channel) for the current task. Follow the Slack
+  docs above for the exact method your integration exposes.
+- **If it cannot**, keep the work in a single Slack thread. Apply the same
+  practices where they still fit: one short status message you edit in place,
+  progress at milestones, and new messages only for conclusions,
+  questions, and blockers.
 
-- `code_channel_set_context`: set the channel header. Status is `processing`
-  while working, `active` when idle and waiting, `closed` when done. Give a 2-5
-  word title and a context bar of up to 5 items (repo, branch, PR, CI status),
-  each with a URL when one exists. Every call replaces the whole bar. It can
-  also designate one summary message (`summary_message_ts`); keep that message
-  fresh with `update_reply`.
-- `code_channel_set_diff`: publish the full unified diff against the base branch
-  into the diff tab. Send the whole diff after every meaningful change, with
-  `base_branch` and `head_branch`.
-- `code_channel_stream`: narrate long work live in one streaming message, with
-  markdown or task-card chunks. Finish with `done: true`.
-- `code_channel_publish_blocks`: a Block Kit tab for a checklist, status board,
-  or findings table. Republish at milestones.
-- `code_channel_publish_canvas`: a comment-only canvas tab for a plan or design
-  doc that people annotate. Send the whole doc each time.
-- `code_channel_get_canvas`: read a canvas tab plus its open comment threads.
-  Call it at the start of each turn while a canvas is live, fold the feedback
-  in, then republish.
-- `code_channel_publish_view`: a self-contained HTML tab for reports or charts.
-  No `<script>` elements.
-- `code_channel_list_views` / `code_channel_remove_view`: list the attached tabs
-  or remove one. There is a 5-view cap.
-- `code_channel_rename`: rename the channel. Use sparingly.
-- `code_channel_archive`: archive the channel. Only when the user says the work
-  is done (see the flow below).
+Once you are in a code channel, prefer the code channel surfaces below over
+plain chat messages for showing progress. Messages are for talking to people.
+The surfaces are for live state.
 
-### Typical flow
+## Code channel capabilities
 
-1. Start of work: `code_channel_set_context` with status `processing`, a short
-   title, and the repo and branch.
-2. While working: `code_channel_stream` for long tasks;
-   `code_channel_publish_blocks` or `code_channel_publish_canvas` for plans and
-   checklists.
-3. After each meaningful change: `code_channel_set_diff` with the full diff.
-4. PR opened or CI changes: `code_channel_set_context` again with the full bar
-   (repo, branch, PR, CI).
-5. Waiting on the user: set status to `active` and ask with `reply`.
-6. Done, and the user says so: update the summary message to a one-sentence
-   outcome, post a ~60-word closing note with `reply`, then call
-   `code_channel_archive` with both ts values.
+Tool names vary by agent and integration. For each capability, look in your
+toolset for something that does what is described. If you have no matching
+tool, skip that capability and fall back to a short message.
 
-### Channel etiquette
+### Header: status, title, and context bar
 
-- Reply at the top level. Don't thread unless the user did.
-- Every message in the channel is addressed to you.
+- **What it does:** shows the session state at the top of the channel. Status
+  is `processing` while you work, `active` when you are idle and waiting on
+  someone, and `closed` when the work is done. A 2 to 5 word title. A context
+  bar of up to 5 items such as repo, branch, PR, and CI status, each linked
+  when a URL exists.
+- **Look for:** a tool that sets channel context, status, or header. It
+  usually replaces the whole bar on each call, so always send every item.
+- **Use it:** when you start, whenever status changes, and whenever a branch,
+  PR, or CI result appears.
+
+### Summary message
+
+- **What it does:** pins one message as the running summary of the session.
+- **Look for:** an option on the header tool that designates a summary message
+  by its timestamp, plus a tool that edits an existing message.
+- **Use it:** create it early, then edit it in place as the work moves rather
+  than posting new status messages.
+
+### Diff tab
+
+- **What it does:** shows the full unified diff of your branch against the
+  base branch.
+- **Look for:** a tool that sets or publishes a diff, taking the diff text
+  plus base and head branch names.
+- **Use it:** after every meaningful change. Send the whole diff each time,
+  not a delta.
+
+### Live progress stream
+
+- **What it does:** narrates long work in one message that updates as you go,
+  with markdown or task-style chunks.
+- **Look for:** a tool that streams to a message, with a way to mark it done.
+- **Use it:** for long multi-step work, such as a big refactor or a test run.
+  Always close the stream when you finish.
+
+### Structured tab (checklist, status board, findings)
+
+- **What it does:** attaches a tab built from Block Kit, good for checklists,
+  status boards, and review findings tables.
+- **Look for:** a tool that publishes Block Kit blocks as a tab or view.
+- **Use it:** for task lists and review findings. Republish at milestones.
+
+### Canvas tab (plans and design docs)
+
+- **What it does:** attaches a canvas that people can comment on, good for a
+  plan or design doc you want feedback on.
+- **Look for:** a tool that publishes a canvas tab, and a tool that reads it
+  back with its open comment threads.
+- **Use it:** when a plan needs review before you code. Send the whole doc
+  each time. While a canvas is live, read it and its comments at the start of
+  each turn, fold the feedback in, then republish.
+
+### HTML report tab
+
+- **What it does:** attaches a self-contained HTML page, good for reports and
+  charts.
+- **Look for:** a tool that publishes an HTML view. Expect script elements to
+  be stripped or rejected.
+- **Use it:** for results that read better as a page, such as a performance or
+  accessibility report.
+
+### Managing tabs
+
+- **What it does:** lists the attached tabs and removes one. Channels hold a
+  limited number of tabs (5 at the time of writing).
+- **Look for:** tools that list and remove views or tabs.
+- **Use it:** before adding a new tab when you are near the cap. Remove tabs
+  that are stale.
+
+### Rename
+
+- **What it does:** renames the channel.
+- **Look for:** a channel rename tool.
+- **Use it:** sparingly, only when the task has clearly changed.
+
+### Archive
+
+- **What it does:** closes out the channel.
+- **Look for:** a tool that archives the code channel, often taking the
+  summary message and closing note timestamps.
+- **Use it:** only when a person says the work is done. First edit the summary
+  message to a one-sentence outcome, then post a closing note of about 60
+  words, then archive.
+
+## Typical flow
+
+1. Start: open a code channel (or a thread if you cannot). Set the header to
+   `processing` with a short title, repo, and branch. Post the summary message.
+2. Plan: if the change needs review, publish a canvas or a checklist tab.
+3. Work: stream long steps. Update the diff tab after each meaningful change.
+4. PR and CI: update the header with the full bar, including the PR and CI
+   links.
+5. Waiting on someone: set status to `active` and ask your question in a short
+   message.
+6. Done, once a person confirms: update the summary, post the closing note,
+   set status to `closed`, and archive.
+
+## Channel etiquette
+
+- Reply at the top level. Do not start threads unless the person did.
+- Treat every message in a code channel as addressed to you.
 - Keep messages short. No em dashes.
-- Use `reply` for conclusions, questions, and blockers. Use the code channel
-  tools for live state.
-- View tools are rate limited to about 50 calls per minute. Publish at
-  milestones, not on every step.
+- Use messages for conclusions, questions, and blockers. Use the code channel
+  surfaces for live state.
+- Tab and view updates are rate limited (about 50 calls per minute). Publish
+  at milestones, not on every step.
+
+## Optional: Claude tool names
+
+If you are Claude with the Slack integration, the capabilities above map to
+`code_channel_set_context` (header and summary message), `code_channel_set_diff`,
+`code_channel_stream`, `code_channel_publish_blocks`,
+`code_channel_publish_canvas`, `code_channel_get_canvas`,
+`code_channel_publish_view`, `code_channel_list_views`,
+`code_channel_remove_view`, `code_channel_rename`, `code_channel_archive`, and
+`reply` / `update_reply` for messages.
