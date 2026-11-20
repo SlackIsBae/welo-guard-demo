@@ -359,3 +359,34 @@ body {
   color: #A8B2C3;
   text-decoration: none;
 }
+
+/* THANKSGIVING THEME */
+body { background: linear-gradient(180deg,#2B1608 0%,#3A1F0C 100%); background-attachment: fixed; }
+.nav { background: #2B1608; border-bottom-color: rgba(255,170,60,.25); }
+.nav__btn, .hero__cta, .btn--primary { background: #E8710A; }
+.nav__btn:hover, .hero__cta:hover, .btn--primary:hover { background: #F28C28; }
+.hero__eyebrow, .section__eyebrow, .feature__eyebrow, .cta-card__eyebrow,
+.card__tag, .card__link, .card--sentinel .card__tag, .card--sentinel .card__link { color: #F5B041; }
+.hero__subhead, .section__subhead, .card__desc, .feature__bullets li, .feature__quote-text,
+.nav__links a, .footer__links a, .proof-bar span { color: #E8D2B5; }
+.hero__eyebrow, .proof-bar, .stat-label, .feature__quote-title, .footer__copy { color: #C9A27A; }
+.feature__bullets li::before, .feature--teal .feature__bullets li::before { color: #E8710A; }
+.card, .cta-card { background: #4A2810; border-color: #8A4B1C; transition: transform .25s; }
+.card:hover { transform: translateY(-6px) rotate(-1deg); }
+.feature__screen { background: #3F2210; border-color: #8A4B1C; }
+.feature__screen-bar { border-color: #8A4B1C; }
+.hero { border-bottom-color: rgba(255,170,60,.2); }
+.hero__headline { background: linear-gradient(90deg,#FFD27A,#F28C28,#C8501E,#F28C28,#FFD27A); background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 6s linear infinite; }
+.hero__cta { animation: pulse 2s ease-in-out infinite; }
+.turkey { font-size: 72px; display: inline-block; transform-origin: 50% 90%; animation: gobble 1.6s ease-in-out infinite; }
+.leaves { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 10; }
+.leaf { position: absolute; top: -48px; left: calc(var(--i) * 8.5%); font-size: calc(20px + (var(--i) % 4) * 6px);
+  animation: fall calc(9s + (var(--i) % 5) * 2s) linear infinite; animation-delay: calc(var(--i) * -1.3s); }
+@keyframes fall { 0% { transform: translate(0,-48px) rotate(0); } 50% { transform: translate(40px,55vh) rotate(180deg); }
+  100% { transform: translate(-20px,110vh) rotate(360deg); } }
+@keyframes gobble { 0%,100% { transform: rotate(-8deg) translateY(0); } 25% { transform: rotate(8deg) translateY(-12px); }
+  50% { transform: rotate(-4deg) translateY(0); } 75% { transform: rotate(6deg) translateY(-6px); } }
+@keyframes shine { to { background-position: 200% center; } }
+@keyframes pulse { 50% { transform: scale(1.06); box-shadow: 0 0 22px rgba(232,113,10,.6); } }
+@media (prefers-reduced-motion: reduce) { .leaf, .turkey, .hero__headline, .hero__cta { animation: none; } }
