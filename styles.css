@@ -1,8 +1,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  /* Arr, we swap the Comic Sans for sturdy Arial, with sans-serif as a lifeboat */
+  font-family: Arial, sans-serif;
   color: #ffffff;
-  background: #0A0F1E;
+  /* Blimey! The dark seas be painted hot pink */
+  background: #FF69B4;
   line-height: 1.5;
 }
 
@@ -14,7 +16,8 @@ body {
   padding: 0 24px;
   height: 60px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
-  background: #0A0F1E;
+  /* Arr, the crow's nest matches the hull, so no dark stripe at the top */
+  background: #FF69B4;
 }
 .nav__logo {
   font-size: 18px;
