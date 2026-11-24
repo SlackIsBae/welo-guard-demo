@@ -1,6 +1,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  /* Arr, we be swappin' the Comic Sans for sturdy Arial, with sans-serif as backup crew */
+  font-family: Arial, Helvetica, sans-serif;
   color: #ffffff;
   background: #0A0F1E;
   line-height: 1.5;
